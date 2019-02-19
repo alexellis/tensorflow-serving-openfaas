@@ -64,6 +64,46 @@ $ curl -d '{"instances": [1.0, 2.0, 5.0]}' \
 
 From here you can run `faas-cli up` and then invoke your function from the OpenFaaS UI, CLI or REST API.
 
+```sh
+$ export OPENFAAS_URL=http://127.0.0.1:8080
+
+$ curl -d '{"instances": [1.0, 2.0, 5.0]}' $OPENFAAS_URL/function/ts-serve/v1/models/half_plus_two:predict
+
+{
+    "predictions": [2.5, 3.0, 4.5
+    ]
+}
+```
+
+<!-- You can even run the inference asynchronously with a callback-URL or separate function set-up to receive the result. -->
+
+Find out more information about your function's endpoints:
+
+```sh
+$ faas-cli describe ts-serve
+Name:                ts-serve
+Status:              Ready
+Replicas:            1
+Available replicas:  1
+Invocations:         5
+Image:               alexellis2/ts-serve:latest
+Function process:    
+URL:                 http://127.0.0.1:8080/function/ts-serve
+Async URL:           http://127.0.0.1:8080/async-function/ts-serve
+Labels:              com.openfaas.function : ts-serve
+                     function : true
+```
+
+<!-- 
+Create a request bin: https://requestbin.fullcontact.com/ i.e. `http://requestbin.fullcontact.com/tgjgrrtg` then run:
+
+```
+$ export OPENFAAS_URL=http://127.0.0.1:8080
+$ export CALLBACK_URL=http://requestbin.fullcontact.com/tgjgrrtg
+
+$ curl -H "X-Callback-Url: $CALLBACK_URL" -d '{"instances": [1.0, 2.0, 5.0]}' $OPENFAAS_URL/async-function/ts-serve/v1/models/half_plus_two:predict
+``` -->
+
 * Try your own model
 
 Now you can try your own model by editing ts-serve/Dockerfile.
