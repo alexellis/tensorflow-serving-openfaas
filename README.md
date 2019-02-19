@@ -15,19 +15,19 @@ This example was adapted from: https://www.tensorflow.org/serving
 * Clone the repo
 
 ```sh
-mkdir -p ~/dev/
-cd ~/dev/
-git clone https://github.com/alexellis/tensorflow-serving-openfaas
+$ mkdir -p ~/dev/
+$ cd ~/dev/
+$ git clone https://github.com/alexellis/tensorflow-serving-openfaas
 ```
 
 * Clone the sample model and copy it to the function's build context
 
 ```sh
-cd ~/dev/tensorflow-serving-openfaas
+$ cd ~/dev/tensorflow-serving-openfaas
 
-git clone https://github.com/tensorflow/serving
+$ git clone https://github.com/tensorflow/serving
 
-cp -r serving/tensorflow_serving/servables/tensorflow/testdata/saved_model_half_plus_two_cpu ./ts-serve/saved_model_half_plus_two_cpu
+$ cp -r serving/tensorflow_serving/servables/tensorflow/testdata/saved_model_half_plus_two_cpu ./ts-serve/saved_model_half_plus_two_cpu
 ```
 
 * Edit the Docker Hub username
@@ -37,7 +37,7 @@ You need to edit the stack.yml file and replace `alexellis2` with your Docker Hu
 * Build the function image
 
 ```sh
-faas-cli build
+$  faas-cli build
 ```
 
 You should now have a Docker image in your local library which you can deploy to a cluster with `faas-cli up`
@@ -47,14 +47,19 @@ You should now have a Docker image in your local library which you can deploy to
 All OpenFaaS images can be run stand-alone without OpenFaaS installed, let's do a quick test, but replace `alexellis2` with your own name.
 
 ```sh
-docker run -p 8081:8080 -ti alexellis2/ts-serve:latest
+$ docker run -p 8081:8080 -ti alexellis2/ts-serve:latest
 ```
 
 Now in another terminal:
 
 ```sh
-curl -d '{"instances": [1.0, 2.0, 5.0]}' \
+$ curl -d '{"instances": [1.0, 2.0, 5.0]}' \
    -X POST http://127.0.0.1:8081/v1/models/half_plus_two:predict
+
+{
+    "predictions": [2.5, 3.0, 4.5
+    ]
+}
 ```
 
 From here you can run `faas-cli up` and then invoke your function from the OpenFaaS UI, CLI or REST API.
